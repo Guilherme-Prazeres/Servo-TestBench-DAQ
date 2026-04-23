@@ -7,6 +7,21 @@
 ## 📋 Visão Geral
 Este sistema de aquisição de dados (DAQ) para a bancada de ensaio de servo motores. Ele permite medir, registrar e analisar torque, corrente e tensão dos servos em tempo real, integrando o hardware a uma interface gráfica desenvolvida em **PyQt6**.
 
+---
+
+## 💻 Software & Instalação
+
+### 📦 Download e Execução (Stable)
+Para baixar o executavel, acesse o link: [BEST Download](https://github.com/Guilherme-Prazeres/Servo-TestBench-DAQ/releases/)
+
+### 🛠️ Instalação para Desenvolvedores
+Caso queira rodar o código fonte ou contribuir com o projeto:
+
+1. **Clonar o repositório**
+   ```bash
+   git clone [https://github.com/Guilherme-Prazeres/Servo-TestBench-DAQ.git](https://github.com/Guilherme-Prazeres/Servo-TestBench-DAQ.git)
+   cd Servo-TestBench-DAQ
+
 ### Grandezas Medidas
 | Grandeza | Sensor / Método | Faixa | Resolução |
 | :--- | :--- | :--- | :--- |
@@ -45,19 +60,3 @@ Este sistema de aquisição de dados (DAQ) para a bancada de ensaio de servo mot
 
 > ⚠️ **ATENÇÃO:** O GND deve ser comum entre a fonte de tensão e o arduino e o servo.
 
----
-
-## 💻 Software & Instalação
-
-### Dependências
-- **Python 3.10+**
-- **PyQt6** (Interface Gráfica)
-- **pyserial** (Comunicação USB/Serial)
-- **pandas / numpy** (Processamento e exportação de dados)
-
-### Passo a Passo
-
-1. **Clonar o repositório**
-   ```bash
-   git clone [https://github.com/](https://github.com/)[seu-usuario]/[repositorio].git
-   cd [repositorio]
