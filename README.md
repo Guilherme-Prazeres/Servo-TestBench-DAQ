@@ -12,7 +12,7 @@ Este sistema de aquisição de dados (DAQ) para a bancada de ensaio de servo mot
 ## 💻 Software & Instalação
 
 ### 📦 Download e Execução (Stable)
-Para baixar o executavel, acesse o link: [BEST Download](https://github.com/Guilherme-Prazeres/Servo-TestBench-DAQ/releases/)
+Para baixar o executavel, acesse [BEST Software Download](https://github.com/Guilherme-Prazeres/Servo-TestBench-DAQ/releases/) e baixe a versão mais recente.
 
 ### 🛠️ Instalação para Desenvolvedores
 Caso queira rodar o código fonte ou contribuir com o projeto:
