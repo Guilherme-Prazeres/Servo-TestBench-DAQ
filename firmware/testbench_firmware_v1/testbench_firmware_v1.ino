@@ -76,6 +76,7 @@ const int calVal_eepromAdress = 0;
 // MovingAverage torqueFilter;
 MovingAverage currentFilter;
 MovingAverage voltageFilter;
+// MovingAverage torqueFilter;
 
 // --- Sensor Configuration ---
 const float VREF = 4.81; // Arduino reference voltage (measure your 5V pin for exact accuracy, e.g., 4.98)
@@ -131,6 +132,9 @@ void setup() {
     while (LoadCell.getTareStatus() == false){
       delay(100);
     }
+
+    // "Disables" the librarie moving average
+    LoadCell.setSamplesInUse(1);
     
     Serial.println("INIT_COMPLETE");
     currentState = IDLE;
@@ -170,25 +174,37 @@ void sendFormattedTelemetry(float torque, float current, float voltage) {
 
 void readAndSendTelemetry() {
   unsigned long currentMillis = millis();
-  static boolean newDataReady = 0;
-  static float actualTorque;
+  static boolean newDataReady = false;
+  static float actualTorque = 0.0; // Keep track of the latest filtered torque
 
+  // 1. ASYNC POLLING: Run continuously, outside the interval check
+  // This catches data exactly when the HX711 pushes it
+  if (LoadCell.dataWaitingAsync()) {
+    LoadCell.updateAsync();
+    newDataReady = true;
+  }
+
+  // Process new torque data the exact millisecond it arrives
+  if (newDataReady) {
+    float rawTorque = LoadCell.getData(); 
+    actualTorque = (rawTorque * 0.001) * SERVO_ARM; 
+    
+    // Feed your custom filter at the maximum hardware sampling rate
+    // actualTorque = torqueFilter.update(instantTorque);
+    newDataReady = false;
+  }
+
+  // 2. TIMED TELEMETRY: Read analog pins and send data at the set interval
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
-    
-    if (LoadCell.update()) newDataReady = true;
 
-    if (newDataReady) {
-      float rawTorque = LoadCell.getData(); 
-      actualTorque = (rawTorque * 0.001) * SERVO_ARM; 
-      newDataReady = 0;
-    }
-
+    // --- Current Reading & Filtering ---
     int rawCurrent = analogRead(CURRENT_PIN);
     float pinVoltageCurrent = (rawCurrent / 1023.0) * VREF;
     float instantCurrent = (pinVoltageCurrent - ACS712_OFFSET) / ACS712_SENSITIVITY;
     float actualCurrent = currentFilter.update(instantCurrent); 
 
+    // --- Voltage Reading & Filtering ---
     int rawVoltage = analogRead(VOLTAGE_PIN);
     float pinVoltageDivider = (rawVoltage / 1023.0) * VREF;
     float instantVoltage = (pinVoltageDivider * VOLTAGE_DIVIDER_RATIO) + V_OFFSET;
@@ -202,7 +218,7 @@ void readAndSendTelemetry() {
     
     float actualVoltage = voltageFilter.update(instantVoltage);
 
-    // --- NEW: Pass the variables to our dedicated printing function ---
+    // --- NEW: Pass the latest filtered variables to the printing function ---
     sendFormattedTelemetry(actualTorque, actualCurrent, actualVoltage);
   }
 }

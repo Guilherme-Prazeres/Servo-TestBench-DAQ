@@ -1,7 +1,9 @@
 class TestController:
-    def __init__(self, ui, com_controller):
+    def __init__(self, ui, com_controller, graph, state_controller):
         self.ui = ui
         self.com_controller = com_controller
+        self.graph = graph
+        self.state_controller = state_controller
         
         # 1. Define your list of available tests here
         # IMPORTANT: Make sure the order here matches the page order in Qt Designer!
@@ -22,13 +24,18 @@ class TestController:
 
         # --- NEW CODE: Connect the combo box to the stacked widget ---
         self.ui.TEST_comboBox.currentIndexChanged.connect(self.change_test_view)
-
+        self.state_controller.state_changed.connect(self.handle_state_change)
         # Connect the button click signals to our methods
         self.ui.Test_init_button.clicked.connect(self.start_test)
         
         # --- NEW CODE: Set initial state ---
         # Force the StackWidget to show the correct page on startup
         self.change_test_view(self.ui.TEST_comboBox.currentIndex())
+
+    def handle_state_change(self, new_state):
+        """Reacts to changes in the FSM state."""
+        if new_state == "IDLE":
+            self.ui.Test_init_button.setEnabled(True)
 
     def start_test(self):
         # 1. Get the currently selected text from the combo box
@@ -40,7 +47,10 @@ class TestController:
         
         # 3. Send the command via the COM controller
         try:
+            self.ui.Test_init_button.setEnabled(False)
             self.com_controller.send_command(selected_test) 
+            self.graph.reset_plots()
+
         except Exception as e:
             print(f"Failed to send test command: {e}")
 
