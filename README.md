@@ -1,7 +1,7 @@
 # 📊 DAQ — Bancada de Ensaio de Servo Motores
 
 <!-- ![Status](https://img.shields.io/badge/Status-Funcional-1D9E75?style=flat-square) -->
-![Versão](https://img.shields.io/badge/Vers%C3%A3o-v1.0.0-185FA5?style=flat-square)
+![Versão](https://img.shields.io/badge/Vers%C3%A3o-v1.1.0-185FA5?style=flat-square)
 ![Licença](https://img.shields.io/badge/Licen%C3%A7a-MIT-gray?style=flat-square)
 
 ## 📋 Visão Geral
