@@ -19,7 +19,7 @@ Caso queira rodar o código fonte ou contribuir com o projeto:
 
 1. **Clonar o repositório**
    ```bash
-   git clone [https://github.com/Guilherme-Prazeres/Servo-TestBench-DAQ.git](https://github.com/Guilherme-Prazeres/Servo-TestBench-DAQ.git)
+   git clone https://github.com/Guilherme-Prazeres/Servo-TestBench-DAQ.git
    cd Servo-TestBench-DAQ
 
 ### Grandezas Medidas
