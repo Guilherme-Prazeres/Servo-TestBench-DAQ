@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1440</width>
-    <height>900</height>
+    <width>1417</width>
+    <height>805</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,9 +26,9 @@
    <widget class="QWidget" name="RTvalues_widget" native="true">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>810</y>
-      <width>261</width>
+      <x>-10</x>
+      <y>720</y>
+      <width>271</width>
       <height>91</height>
      </rect>
     </property>
@@ -61,7 +61,7 @@
       <rect>
        <x>20</x>
        <y>10</y>
-       <width>233</width>
+       <width>241</width>
        <height>67</height>
       </rect>
      </property>
@@ -86,13 +86,13 @@ color: rgb(255, 255, 255);
          <string>VALORES EM TEMPO REAL</string>
         </property>
         <property name="textFormat">
-         <enum>Qt::PlainText</enum>
+         <enum>Qt::TextFormat::PlainText</enum>
         </property>
        </widget>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item alignment="Qt::AlignHCenter">
+        <item alignment="Qt::AlignmentFlag::AlignHCenter">
          <widget class="QLabel" name="metricTorque_valuesLabel">
           <property name="styleSheet">
            <string notr="true"/>
@@ -105,7 +105,7 @@ color: rgb(255, 255, 255);
           </property>
          </widget>
         </item>
-        <item alignment="Qt::AlignHCenter">
+        <item alignment="Qt::AlignmentFlag::AlignHCenter">
          <widget class="QLabel" name="metricCorrente_valueLabel">
           <property name="styleSheet">
            <string notr="true">color: rgb(255, 255, 255);</string>
@@ -142,7 +142,7 @@ color: rgb(255, 255, 255);
       <x>0</x>
       <y>0</y>
       <width>261</width>
-      <height>161</height>
+      <height>131</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -152,13 +152,13 @@ color: rgb(255, 255, 255);
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>20</y>
+       <y>0</y>
        <width>241</width>
        <height>121</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
-      <item alignment="Qt::AlignHCenter">
+      <item alignment="Qt::AlignmentFlag::AlignHCenter">
        <widget class="QLabel" name="COM_tittle">
         <property name="font">
          <font>
@@ -176,7 +176,7 @@ color: rgb(255, 255, 255);</string>
          <string>CONEXÃO SERIAL</string>
         </property>
         <property name="textFormat">
-         <enum>Qt::PlainText</enum>
+         <enum>Qt::TextFormat::PlainText</enum>
         </property>
        </widget>
       </item>
@@ -192,7 +192,7 @@ color: rgb(255, 255, 255);</string>
         <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -211,8 +211,7 @@ color: rgb(255, 255, 255);</string>
            <string/>
           </property>
           <property name="icon">
-           <iconset theme="view-refresh">
-            <normaloff>.</normaloff>.</iconset>
+           <iconset theme="view-refresh"/>
           </property>
          </widget>
         </item>
@@ -482,9 +481,9 @@ color: rgb(255, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>160</y>
+      <y>130</y>
       <width>261</width>
-      <height>151</height>
+      <height>141</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -500,7 +499,7 @@ color: rgb(255, 255, 255);</string>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item alignment="Qt::AlignHCenter">
+      <item alignment="Qt::AlignmentFlag::AlignHCenter">
        <widget class="QLabel" name="ManualControl_title">
         <property name="font">
          <font>
@@ -518,7 +517,7 @@ color: rgb(255, 255, 255);</string>
          <string>CONTROLE MANUAL</string>
         </property>
         <property name="textFormat">
-         <enum>Qt::PlainText</enum>
+         <enum>Qt::TextFormat::PlainText</enum>
         </property>
        </widget>
       </item>
@@ -627,9 +626,9 @@ background-color: rgb(18, 19, 20);</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>310</y>
+      <y>270</y>
       <width>261</width>
-      <height>501</height>
+      <height>451</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -641,7 +640,7 @@ background-color: rgb(18, 19, 20);</string>
        <x>10</x>
        <y>10</y>
        <width>241</width>
-       <height>491</height>
+       <height>431</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -713,7 +712,7 @@ QLabel:disabled {
            <item row="1" column="0">
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -726,7 +725,7 @@ QLabel:disabled {
            <item row="1" column="2">
             <spacer name="horizontalSpacer_3">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -773,7 +772,7 @@ QLabel:disabled {
             <x>0</x>
             <y>60</y>
             <width>241</width>
-            <height>351</height>
+            <height>291</height>
            </rect>
           </property>
           <property name="whatsThis">
@@ -897,10 +896,10 @@ QLabel:disabled {
     <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
+       <x>0</x>
+       <y>0</y>
        <width>1031</width>
-       <height>881</height>
+       <height>801</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -918,7 +917,7 @@ QLabel:disabled {
     <widget class="QWidget" name="ConfigWidget" native="true">
      <property name="geometry">
       <rect>
-       <x>1040</x>
+       <x>1030</x>
        <y>10</y>
        <width>131</width>
        <height>881</height>
@@ -933,7 +932,7 @@ QLabel:disabled {
         <x>10</x>
         <y>0</y>
         <width>111</width>
-        <height>881</height>
+        <height>791</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1036,7 +1035,7 @@ QLabel:disabled {
        <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>

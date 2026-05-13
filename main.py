@@ -35,8 +35,6 @@ class AppWindow(QMainWindow):
         
         # self.setWindowIcon(QIcon(icon_path))
 
-        self.setFixedSize(1440, 900)
-
         self.state_controller = StateController()
         self.com_controller = COMController(self, self.state_controller)
 
