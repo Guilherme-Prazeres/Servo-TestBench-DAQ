@@ -58,8 +58,8 @@ Servo Servo;
 unsigned long previousMillis = 0;
 const long interval = 50;
 const int SERVO_ARM = 1.5; //cm
-const int PWM_MAX = 2000;
-const int PWM_MIN = 1000;
+const int PWM_MAX = 1000;
+const int PWM_MIN = 2000;
 
 // Hardware Pin Definitions
 const int SERVO_PIN = 3;         // PD3
@@ -79,7 +79,7 @@ MovingAverage voltageFilter;
 // MovingAverage torqueFilter;
 
 // --- Sensor Configuration ---
-const float VREF = 4.81; // Arduino reference voltage (measure your 5V pin for exact accuracy, e.g., 4.98)
+const float VREF = 4.75; // Arduino reference voltage
 
 // Voltage Divider Constants
 const float R1 = 980.0; // 1000 Ohm
@@ -89,7 +89,7 @@ const float V_OFFSET = - 0.2;
 
 // ACS712 Constants
 // Sensitivities: 5A module = 0.185 (V/A), 20A module = 0.100 (V/A), 30A module = 0.066 (V/A)
-const float ACS712_SENSITIVITY = 0.066; 
+const float ACS712_SENSITIVITY = -0.066; 
 const float ACS712_OFFSET = VREF / 2.0; // ACS712 outputs Vcc/2 at 0 Amps (usually 2.5V)
 
 void setup() {
@@ -142,7 +142,7 @@ void setup() {
 }
 
 void sendFormattedTelemetry(float torque, float current, float voltage) {
-  // 1. Determine the string name of the current state
+  
   String stateName = "";
   switch (currentState) {
     case IDLE:            stateName = "IDLE"; break;
@@ -150,7 +150,6 @@ void sendFormattedTelemetry(float torque, float current, float voltage) {
     case TARE:            stateName = "TARE"; break;
     case ERROR_STATE:     stateName = "ERROR"; break;
     
-    // --- NEW: Dynamic state naming for the test ---
     case MAX_TORQUE_TEST: 
       if (currentTestPhase == NONE) stateName = "IDLE";
       else if (currentTestPhase == STARTING) stateName = "STARTING";
@@ -162,7 +161,7 @@ void sendFormattedTelemetry(float torque, float current, float voltage) {
     default:              stateName = "SYS"; break;
   }
 
-  // 2. Output the concatenated data
+  // Output the concatenated data
   Serial.print(stateName);
   Serial.print(",");
   Serial.print(torque);
@@ -177,8 +176,7 @@ void readAndSendTelemetry() {
   static boolean newDataReady = false;
   static float actualTorque = 0.0; // Keep track of the latest filtered torque
 
-  // 1. ASYNC POLLING: Run continuously, outside the interval check
-  // This catches data exactly when the HX711 pushes it
+  // ASYNC POLLING: Run continuously
   if (LoadCell.dataWaitingAsync()) {
     LoadCell.updateAsync();
     newDataReady = true;
@@ -190,11 +188,10 @@ void readAndSendTelemetry() {
     actualTorque = (rawTorque * 0.001) * SERVO_ARM; 
     
     // Feed your custom filter at the maximum hardware sampling rate
-    // actualTorque = torqueFilter.update(instantTorque);
     newDataReady = false;
   }
 
-  // 2. TIMED TELEMETRY: Read analog pins and send data at the set interval
+  // Read analog pins and send data at the set interval
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
 
@@ -210,15 +207,14 @@ void readAndSendTelemetry() {
     float instantVoltage = (pinVoltageDivider * VOLTAGE_DIVIDER_RATIO) + V_OFFSET;
 
     if (instantVoltage > 6.0) {
-      instantVoltage -= 0.15; 
+      instantVoltage -= 0.2; 
     }
-    if (instantVoltage <= 3.0) {
-      instantVoltage += 0.1; 
-    }
+    // if (instantVoltage <= 3.0) {
+    //   instantVoltage += 0.1; 
+    // }
     
     float actualVoltage = voltageFilter.update(instantVoltage);
 
-    // --- NEW: Pass the latest filtered variables to the printing function ---
     sendFormattedTelemetry(actualTorque, actualCurrent, actualVoltage);
   }
 }
@@ -309,7 +305,6 @@ void loop() {
           Servo.writeMicroseconds(PWM_MIN);
 
           if (pull < 3) {
-            // --- ADDED: Set phase to cooldown ---
             currentTestPhase = COOLDOWN;
             unsigned long cooldownStart = millis();
             while (millis() - cooldownStart <= 3000) {
@@ -318,14 +313,12 @@ void loop() {
           }
         }
 
-        // --- ADDED: Back to stabilizing for the end ---
         currentTestPhase = COOLDOWN;
         unsigned long finalStabilizeStart = millis();
         while (millis() - finalStabilizeStart <= 3000) {
           readAndSendTelemetry();
         }
         
-        // --- ADDED: Reset phase and go IDLE ---
         currentTestPhase = NONE; 
         currentState = IDLE;
       }

@@ -102,13 +102,17 @@ class COMController:
             try:
                 formatted_message = f"{command}\n"
                 self.serial_connection.write(formatted_message.encode('utf-8'))
+            except (serial.SerialException, OSError) as e:
+                print(f"Conection Lost: {e}")
+                self.disconnect() # Disconnects if the cable was pulled during a write
             except Exception as e:
-                print(f"Erro ao enviar dado: {e}")
+                print(f"Error: {e}")
 
     def read_serial_data(self):
         """Reads incoming data and passes it straight to the StateController."""
         if self.serial_connection and self.serial_connection.is_open:
             try:
+                # If the USB is disconnected, checking in_waiting will raise an exception
                 while self.serial_connection.in_waiting > 0:
                     line = self.serial_connection.readline().decode('utf-8', errors='ignore').strip()
                     
@@ -116,5 +120,9 @@ class COMController:
                         # Direct the raw string to the state controller
                         self.state_controller.process_incoming_data(line)
                         
+            except (serial.SerialException, OSError) as e:
+                # This triggers when the Arduino is physically disconnected
+                print(f"Arduino desconectado fisicamente: {e}")
+                self.disconnect()
             except Exception as e:
                 print(f"Erro ao ler serial: {e}")

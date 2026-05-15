@@ -39,7 +39,7 @@ class TelemetryController:
         <p align="justify"><span style=" font-size:12px; font-weight:700; color:#d9dcd6;">MAX CORRENTE:</span><span style=" font-size:12px; font-weight:700; color:#22282a;">----</span><span style=" font-size:23px; font-weight:800; color:#ffffff;">{meanCurr:.2f} </span><span style=" font-size:16px; font-weight:700; color:#00d2ff;">A</span></p>
         <p align="justify"><span style=" font-size:12px; font-weight:700; color:#d9dcd6;">TENSÃO:</span><span style=" font-size:12px; font-weight:700; color:#22282a;">-------------</span><span style=" font-size:23px; font-weight:800; color:#ffffff;">{meanVolt:.2f} </span><span style=" font-size:16px; font-weight:700; color:#00d2ff;">V</span></p>
         <p align="justify"><span style=" font-size:12px; font-weight:700; color:#d9dcd6;">RESISTÊNCIA:</span><span style=" font-size:12px; font-weight:700; color:#22282a;">--------</span><span style=" font-size:23px; font-weight:800; color:#ffffff;">{resistance:.2f} </span><span style=" font-size:16px; font-weight:700; color:#00d2ff;">ohm</span></p>
-        <p align="justify"><span style=" font-size:16pt; font-weight:700; color:#d9dcd6;">K</span><span style=" font-size:16pt; font-weight:700; color:#d9dcd6; vertical-align:sub;">t</span><span style=" font-size:12px; font-weight:700; color:#d9dcd6;">:</span><span style=" font-size:12px; font-weight:700; color:#22282a;">------------------</span><span style=" font-size:23px; font-weight:800; color:#ffffff;">{kt:.4f} </span><span style=" font-size:16px; font-weight:700; color:#00d2ff;">N.m/A</span></p>
+        <p align="justify"><span style=" font-size:16pt; font-weight:700; color:#d9dcd6;">K</span><span style=" font-size:16pt; font-weight:700; color:#d9dcd6; vertical-align:sub;">t</span><span style=" font-size:12px; font-weight:700; color:#d9dcd6;">:</span><span style=" font-size:12px; font-weight:700; color:#22282a;">------------------</span><span style=" font-size:23px; font-weight:800; color:#ffffff;">{kt:.2f} </span><span style=" font-size:16px; font-weight:700; color:#00d2ff;">kg.cm/A</span></p>
         <p align="justify"><span style=" font-size:16pt; font-weight:700; color:#d9dcd6;">K</span><span style=" font-size:16pt; font-weight:700; color:#d9dcd6; vertical-align:sub;">v</span><span style=" font-size:12px; font-weight:700; color:#d9dcd6;">:</span><span style=" font-size:12px; font-weight:700; color:#22282a;">------------------</span><span style=" font-size:23px; font-weight:800; color:#ffffff;">{kv:.0f} </span><span style=" font-size:16px; font-weight:700; color:#00d2ff;">RPM/V</span></p>
         <p align="justify"><span style=" font-size:12px; font-weight:700; color:#d9dcd6;">POWER:</span><span style=" font-size:12px; font-weight:700; color:#22282a;">-------------</span><span style=" font-size:23px; font-weight:800; color:#ffffff;">{power:.2f} </span><span style=" font-size:16px; font-weight:700; color:#00d2ff;">W</span></p>
         </body></html>
@@ -111,9 +111,9 @@ class TelemetryController:
             self.pulling_voltages.append(voltage) # Track pulling voltage
             
             # Retrieve the top 300 values
-            top_300_torques = sorted(self.pulling_torques, reverse=True)[:150]
-            top_300_currents = sorted(self.pulling_currents, reverse=True)[:150]
-            top_300_voltages = sorted(self.pulling_voltages, reverse=True)[:150]
+            top_300_torques = sorted(self.pulling_torques, reverse=True)[:300]
+            top_300_currents = sorted(self.pulling_currents, reverse=True)[:300]
+            top_300_voltages = sorted(self.pulling_voltages, reverse=True)[:300]
             
             # Calculate Means
             meanTorque = np.mean(top_300_torques) if top_300_torques else 0.0
@@ -128,12 +128,12 @@ class TelemetryController:
 
             # 2. Kt (Torque Constant in N.m/A)
             # Conversion: 1 kg.cm = 0.0980665 N.m
-            torque_nm = meanTorque * 0.0980665
-            kt = (torque_nm / meanCurr) if meanCurr > 0.0 else 0.0
+            # torque_nm = meanTorque * 0.0980665
+            kt = (meanTorque / meanCurr) if meanCurr > 0.0 else 0.0
 
             # 3. Kv (Motor Velocity Constant in RPM/V)
             # Derived from Kt using the standard formula: Kv = 60 / (2 * PI * Kt)
-            kv = (60.0 / (2 * math.pi * kt)) if kt > 0.0 else 0.0
+            kv = (60.0 / (2 * math.pi * (kt* 0.0980665))) if kt > 0.0 else 0.0
 
             # 4. Power (Electrical Power in Watts) = V * I
             power = meanVolt * meanCurr
